@@ -3,11 +3,11 @@ name: CI-Docker
 on:
   push:
     branches:
-      - master
+      - ee-gcc10
     tags:
       - v*
   repository_dispatch:
-    types: [run_build]
+    types: [run_build_experimental]
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
     - name: Use default DOCKER_TAG
       if: startsWith(github.ref, 'refs/tags/') != true
       run: |
-        echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+        echo "DOCKER_TAG=experimental" >> $GITHUB_ENV
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -43,13 +43,13 @@ jobs:
         push: true
         tags: ${{ github.repository }}:${{ env.DOCKER_TAG }}
         build-args: |
-          BASE_DOCKER_DVP_IMAGE=${{ github.repository_owner }}/ps2toolchain-dvp:${{ env.DOCKER_TAG }}
-          BASE_DOCKER_IOP_IMAGE=${{ github.repository_owner }}/ps2toolchain-iop:${{ env.DOCKER_TAG }}
+          BASE_DOCKER_DVP_IMAGE=${{ github.repository_owner }}/ps2toolchain-dvp:latest
+          BASE_DOCKER_IOP_IMAGE=${{ github.repository_owner }}/ps2toolchain-iop:latest
           BASE_DOCKER_EE_IMAGE=${{ github.repository_owner }}/ps2toolchain-ee:${{ env.DOCKER_TAG }}
     
     - name: Send Compile action
       run: |
-        export DISPATCH_ACTION="$(echo run_build)"
+        export DISPATCH_ACTION="$(echo run_build_experimental)"
         echo "NEW_DISPATCH_ACTION=$DISPATCH_ACTION" >> $GITHUB_ENV
 
     - name: Repository Dispatch
