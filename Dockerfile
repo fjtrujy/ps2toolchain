@@ -2,7 +2,7 @@
 FROM ps2dev/ps2toolchain-dvp:latest
 
 # iop stage of Dockerfile
-FROM ps2dev/ps2toolchain-iop:latest
+FROM fjtrujy/ps2toolchain-iop:latest
 
 # ee stage of Dockerfile
 FROM ps2dev/ps2toolchain-ee:latest
